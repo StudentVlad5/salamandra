@@ -34,7 +34,7 @@ import salamandraDeskWeb2x from 'images/hero/salamandraDesk@2x.webp';
 
 import { Navigation } from './Navigation/Navigation';
 
-export const Header = ({catalog, group, menu, isLoading, setIsLoading, error}) => {
+export const Header = ({catalog, isLoading, error}) => {
   return (
     <>
       <Hero>
@@ -130,7 +130,7 @@ export const Header = ({catalog, group, menu, isLoading, setIsLoading, error}) =
           </picture>
         </TitleBox>
       </Hero>
-      <Navigation catalog={catalog} group={group} menu={menu} isLoading={isLoading} setIsLoading={setIsLoading} error={error}/>
+      <Navigation catalog={catalog} isLoading={isLoading} error={error}/>
     </>
   );
 };

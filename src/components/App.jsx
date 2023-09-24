@@ -19,8 +19,6 @@ export const App = () => {
   const permission = useSelector(getPermission);
 
   const [catalog, setCatalog] = useState([]);
-  const [group, setGroup] = useState([]);
-  const [menu, setMenu] = useState([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,33 +26,16 @@ export const App = () => {
     dispatch(refreshUser());
   }, [dispatch]);
 
-
-
   useEffect(() => {
     (async function getData() {
       setIsLoading(true);
       try {
-        const { data } = await fetchData(`/menu`);
+        const { data } = await fetchData(`/product`);
         if (!data) {
           return onFetchError('Whoops, something went wrong');
         }
-        setMenu(data);
         const listOfGroup = data.map(item => item.product);
-        let uniqueGroup = [...new Set(listOfGroup)];
-        setGroup(uniqueGroup);
-        let uniqueCategory = {};
-        for (const key of uniqueGroup) {
-          uniqueCategory[key] = [];
-          data.forEach(item => {
-            if (item.product === key) {
-              uniqueCategory[key].push(item.category);
-            }
-          });
-        }
-        for (const key in uniqueCategory) {
-          uniqueCategory[`${key}`] = [...new Set(uniqueCategory[`${key}`])];
-        }
-        setCatalog(uniqueCategory);
+        setCatalog(listOfGroup);
       } catch (error) {
         setError(error);
       } finally {
@@ -63,23 +44,16 @@ export const App = () => {
     })();
   }, []);
 
-
-
   return isRefreshing ? (
     <></>
   ) : (
     <HelmetProvider>
       <Suspense fallback={<div>{'Loading...'}</div>}>
         <Routes>
-          <Route path="/" element={<SharedLayout catalog={catalog} group={group} menu={menu} isLoading={isLoading} setIsLoading={setIsLoading} error={error}/>}>
-            <Route index element={<LandingPage catalog={catalog} group={group} menu={menu} isLoading={isLoading} setIsLoading={setIsLoading} error={error}/>} />
-            <Route path="*" element={<LandingPage catalog={catalog} group={group} menu={menu} isLoading={isLoading} setIsLoading={setIsLoading} error={error}/>} />
+          <Route path="/" element={<SharedLayout catalog={catalog} isLoading={isLoading} error={error}/>}>
+            <Route index element={<LandingPage catalog={catalog}/>} />
+            <Route path="*" element={<LandingPage catalog={catalog}/>} />
           </Route>
-
-
-
-
-
           {permission === 'admin' ? (
             <Route path="admin" element={<AdminPage />} />
           ) : (

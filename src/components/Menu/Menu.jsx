@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
   Img,
@@ -20,22 +20,65 @@ import {
 } from './Menu.styled';
 import { onLoaded, onLoading } from 'helpers/Loader/Loader';
 import { Container } from 'components/baseStyles/CommonStyle.styled';
+import { onFetchError } from 'helpers/Messages/NotifyMessages';
+import { fetchData } from 'services/APIservice';
 
-export const Menu = ({catalog, group, menu, isLoading, setIsLoading, error}) => {
+export const Menu = ({catalog}) => {
   const { BASE_URL_IMG } = window.global;
+  const [menu, setMenu] = useState([]);
+  const [group, setGroup] = useState([]);
+  const [subGroup, setSubGroup] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    (async function getData() {
+      setIsLoading(true);
+      try {
+        const { data } = await fetchData(`/menu`);
+        if (!data) {
+          return onFetchError('Whoops, something went wrong');
+        }
+        setMenu(data);
+        const listOfGroup = data.map(item => item.product);
+        let uniqueGroup = [...new Set(listOfGroup)];
+        setGroup(uniqueGroup);
+        let uniqueCategory = {};
+        for (const key of uniqueGroup) {
+          uniqueCategory[key] = [];
+          data.forEach(item => {
+            if (item.product === key) {
+              uniqueCategory[key].push(item.category);
+            }
+          });
+        }
+        for (const key in uniqueCategory) {
+          uniqueCategory[`${key}`] = [...new Set(uniqueCategory[`${key}`])];
+        }
+        setSubGroup(uniqueCategory);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
   return (
     <Container>
       <MenuSection>
-        {group.map(it => (
+        {catalog  && catalog?.map(it => (
           <div style={{ width: '100%' }} key={uuidv4()}>
             <MenuTitle id={it}>{it}</MenuTitle>
-            {catalog[`${it}`].map(cat => (
+            {subGroup[`${it}`]?.map(cat => (
               <div key={uuidv4()}>
                 {it !== cat && <MenuSubTitle>{cat}</MenuSubTitle>}
                 <MenuList>
-                  {menu.map(
+                  {menu?.map(
                     item =>
-                    (item.category === cat && item?.active) && (
+                    (
+                      item.category === cat && 
+                      item?.active) && (
                         <MenuListItem key={uuidv4()}>
                           {item.images !== 'none' && item.images && (
                             <Img
@@ -50,7 +93,7 @@ export const Menu = ({catalog, group, menu, isLoading, setIsLoading, error}) => 
                             <TitleItem>{item.name}</TitleItem>
                             <DivForName>
                               {item?.alcohol &&
-                                item.alcohol.map(alc => (
+                                item.alcohol?.map(alc => (
                                   <AlcogolItem key={uuidv4()}>
                                     {alc}
                                   </AlcogolItem>
@@ -63,15 +106,11 @@ export const Menu = ({catalog, group, menu, isLoading, setIsLoading, error}) => 
                                 </DetailsTitle>
                               </PriceItem>
                               <DetailsItem>
-                                {/* {item.details[0] !== '' &&
-                                  item.details[0] !== undefined && (
-                                    <DetailsTitle>Детальіше</DetailsTitle>
-                                  )} */}
                               </DetailsItem>
                             </InfoItem>
                             <Details>
                               {item?.details &&
-                                item.details.map(det => (
+                                item.details?.map(det => (
                                   <DetailsText key={uuidv4()}>
                                     {det}
                                   </DetailsText>
@@ -87,7 +126,7 @@ export const Menu = ({catalog, group, menu, isLoading, setIsLoading, error}) => 
           </div>
         ))}
         {isLoading ? onLoading() : onLoaded()}
-        {error && <h1>{error}</h1>}
+        {error && onFetchError('Whoops, something went wrong')}
       </MenuSection>
     </Container>
   );

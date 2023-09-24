@@ -18,13 +18,13 @@ export const Nav = styled.nav`
   width: 100%;
   overflow-x: scroll;
   white-space: nowrap;
-  position: ${({ isFixed }) => (isFixed ? 'fixed' : 'static')};
-  top: ${({ isFixed }) => (isFixed ? '0' : 'auto')};
+  position: ${({ isfixed }) => (isfixed  ? 'fixed' : 'static')};
+  top: ${({ isfixed }) => (isfixed ? '0' : 'auto')};
   left: 0;
-  background-color: ${({ isFixed }) => (isFixed ? '#ffffff' : 'transparent')};
-  box-shadow: ${({ isFixed }) =>
-    isFixed ? '0px 2px 5px rgba(0, 0, 0, 0.1)' : 'none'};
-  z-index: ${({ isFixed }) => (isFixed ? '1000' : 'auto')};
+  background-color: ${({ isfixed }) => (isfixed ? '#ffffff' : 'transparent')};
+  box-shadow: ${({ isfixed }) =>
+    isfixed ? '0px 2px 5px rgba(0, 0, 0, 0.1)' : 'none'};
+  z-index: ${({ isfixed }) => (isfixed ? '1000' : 'auto')};
   transition: top 0.3s ease;
 
   &::-webkit-scrollbar {

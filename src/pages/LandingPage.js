@@ -1,12 +1,12 @@
-import React from 'react';
-import { SEO } from 'utils/SEO';
-import { Menu } from 'components/Menu/Menu';
+import React from "react";
+import { SEO } from "utils/SEO";
+import { Menu } from "components/Menu/Menu";
 
-const LandingPage = ({catalog, group, menu, isLoading, setIsLoading, error}) => {
+const LandingPage = ({ catalog }) => {
   return (
     <>
       <SEO title="Menu" description="The Salamandra" />
-      <Menu catalog={catalog} group={group} menu={menu} isLoading={isLoading} setIsLoading={setIsLoading} error={error}/>
+      <Menu catalog={catalog} />
     </>
   );
 };

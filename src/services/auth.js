@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// const BASE_URL = "https://";
-// const BASE_URL = 'http://localhost:3030/api';
-const BASE_URL = 'https://salamandrabackend.studentvlad5.repl.co/api';
+const BASE_URL = 'http://localhost:3030/api';
+// const BASE_URL = 'https://salamandrabackend.studentvlad5.repl.co/api';
 
 export const signUp = async credentials => {
   try {

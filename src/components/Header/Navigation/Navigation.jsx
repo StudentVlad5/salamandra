@@ -10,9 +10,9 @@ import {
   NavListItemLink,
 } from './Navigation.styled';
 
-export const Navigation = ({catalog, group, menu, isLoading, setIsLoading, error}) => {
+export const Navigation = ({catalog, isLoading, error}) => {
   const [, setScrollX] = useState(0); //scrollX
-  const [isFixed, setIsFixed] = useState(false);
+  const [isFixed, setIsFixed] = useState("");
   const handleSliderScroll = e => {
     const container = e.target;
     const scrollLeft = container.scrollLeft;
@@ -27,7 +27,7 @@ export const Navigation = ({catalog, group, menu, isLoading, setIsLoading, error
       if (!nav) return;
 
       const navPosition = nav.getBoundingClientRect().top;
-      setIsFixed(navPosition <= 0);
+      setIsFixed((navPosition <= 0));
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -39,11 +39,11 @@ export const Navigation = ({catalog, group, menu, isLoading, setIsLoading, error
   return (
     <NavBox id="nav">
       <SwitchTheme />
-      <Nav onScroll={handleSliderScroll} isFixed={isFixed}>
+      <Nav onScroll={handleSliderScroll} isfixed={isFixed}>
         <NavList>
           {isLoading ? onLoading() : onLoaded()}
           {error && onFetchError('Whoops, something went wrong')}
-          {group.map((item, i) => (
+          {catalog.map((item, i) => (
             <NavListItem key={i}>
               <NavListItemLink href={`${currentUrl}#${item}`} aria-label={item}>
                 {item}
