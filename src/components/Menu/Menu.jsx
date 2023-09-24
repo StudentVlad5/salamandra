@@ -26,7 +26,7 @@ import { fetchData } from 'services/APIservice';
 export const Menu = ({catalog}) => {
   const { BASE_URL_IMG } = window.global;
   const [menu, setMenu] = useState([]);
-  const [group, setGroup] = useState([]);
+  const [, setGroup] = useState([]);
   const [subGroup, setSubGroup] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
