@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/salamandra/static/css/main.7cda0caf.css",
-    "main.js": "/salamandra/static/js/main.4c5964d9.js",
+    "main.js": "/salamandra/static/js/main.c4fdae46.js",
     "static/media/fonMob.png": "/salamandra/static/media/fonMob.d7b15c415580869b09e2.png",
     "static/media/fonMob.webp": "/salamandra/static/media/fonMob.d7b15c415580869b09e2.webp",
     "static/media/fonMob@2x.png": "/salamandra/static/media/fonMob@2x.d7b15c415580869b09e2.png",
@@ -21,10 +21,10 @@
     "index.html": "/salamandra/index.html",
     "static/media/logout.svg": "/salamandra/static/media/logout.679e7d3c509259498f69b6b64831187f.svg",
     "main.7cda0caf.css.map": "/salamandra/static/css/main.7cda0caf.css.map",
-    "main.4c5964d9.js.map": "/salamandra/static/js/main.4c5964d9.js.map"
+    "main.c4fdae46.js.map": "/salamandra/static/js/main.c4fdae46.js.map"
   },
   "entrypoints": [
     "static/css/main.7cda0caf.css",
-    "static/js/main.4c5964d9.js"
+    "static/js/main.c4fdae46.js"
   ]
 }
