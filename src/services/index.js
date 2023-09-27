@@ -2,6 +2,9 @@ import axios from 'axios';
 import { refreshUser } from '../redux/auth/operations';
 import { store } from '../redux/store';
 
+// const { BASE_URL } = window.global;
+
+// const BASE_URL = "https://";
 // const BASE_URL = 'http://localhost:3030/api';
 const BASE_URL = 'https://salamandrabackend.studentvlad5.repl.co/api';
 

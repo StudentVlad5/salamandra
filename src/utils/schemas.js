@@ -63,10 +63,29 @@ const schemasChangePassword = Yup.object().shape({
     .required('Require'),
 });
 
+const schemasMenuPosition = Yup.object().shape({
+  article: Yup.number().required('Require field'),
+  product: Yup.string().required('Require field'),
+  category: Yup.string().required('Require field'),
+  name: Yup.string().required('Require field'),
+  latin_name: Yup.string().required('Require field'),
+  alcohol: Yup.mixed(),
+  details: Yup.array().nullable().min(2).required(),
+  price: Yup.number().required('Require field'),
+  currency: Yup.string(),
+  images: Yup.string(),
+  size: Yup.object().shape({
+    value: Yup.number(),
+    mesure: Yup.string(),
+  }),
+  admin: Yup.string(),
+});
+
 const schemas = {
   registerSchema,
   schemasLogin,
   schemasChangePassword,
+  schemasMenuPosition,
 };
 
 export default schemas;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import theme from 'components/baseStyles/Variables.styled';
+import { SubtitleText } from 'components/baseStyles/CommonStyle.styled';
 
 const MenuSection = styled.section`
   display: flex;
@@ -22,12 +23,9 @@ const MenuTitle = styled.h2`
   margin: 25px 0;
 `;
 
-const MenuSubTitle = styled(MenuTitle)`
-  text-transform: lowercase;
-  text-align: start;
-  &:first-letter {
-    text-transform: capitalize;
-  }
+const MenuSubTitle = styled(SubtitleText)`
+  margin-top: 25px;
+  text-transform: capitalize;
 `;
 
 const MenuList = styled.ul`
@@ -77,13 +75,13 @@ const MenuListItem = styled.li`
 
 const Img = styled.img`
   width: 150px;
-  height: 150px;
+  height: 170px;
   min-width: 150px;
   border-radius: 20px;
 
   @media screen and (min-width: ${theme.breakpoints.tablet}) {
     width: 220px;
-    height: 230px;
+    height: 240px;
   }
 `;
 
@@ -126,6 +124,7 @@ const InfoItem = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: start;
+  align-items: center;
 `;
 const PriceItem = styled.div`
   width: 50%;
@@ -133,10 +132,14 @@ const PriceItem = styled.div`
 
 const DetailsItem = styled.div`
   width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
   align-items: end;
+  color: ${theme.colors.gray};
+  font-family: ${theme.fonts[1]};
+  font-size: ${theme.fontSizes.extraSmall};
+  font-style: normal;
+  font-weight: 400;
+  text-align: right;
+  line-height: normal;
 `;
 
 const DetailsText = styled.li`

@@ -29,6 +29,7 @@ export const Title = styled.h1`
   text-transform: uppercase;
   text-align: center;
   margin-bottom: 15px;
+  position: inherit;
 
   @media screen and (min-width: ${theme.breakpoints.desktop}) {
     font-size: ${theme.fontSizes.extraXXL};

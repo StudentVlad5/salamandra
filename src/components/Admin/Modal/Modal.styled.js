@@ -14,11 +14,12 @@ export const Backdrop = styled.div`
 
   width: 100%;
   height: 100%;
-  padding-top: 100px;
+  padding-top: 30px;
 
   background: rgba(0, 0, 0, 0.2);
 
   transition: ${theme.transition};
+  overflow-y: scroll;
 
   &.is-hidden {
     opacity: 0;
@@ -31,6 +32,7 @@ export const Modal = styled.div`
   position: relative;
   display: block;
 
+  width: 90%;
   max-width: calc(100vw - 40px);
   padding: 20px;
 
@@ -66,10 +68,11 @@ export const FormList = styled.div`
   justify-content: space-between;
   align-content: space-between;
   align-items: stretch;
-  gap: 5px;
+  gap: 15px;
 `;
 
 export const FormField = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -85,7 +88,55 @@ export const FormLabel = styled.label`
   letter-spacing: 0.04em;
 `;
 
+export const FormLabelBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  width: 100%;
+
+  font-family: ${theme.fonts[2]};
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: 0.04em;
+`;
+
+export const FormRatio = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+
+  width: 70%;
+
+  font-family: ${theme.fonts[2]};
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: 0.04em;
+`;
+
+export const FormInputBox = styled.div`
+  display: flex;
+  gap: 8px;
+  width: 70%;
+`;
+
+export const FormInputBoxColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 70%;
+
+  & input {
+    width: 86%;
+  }
+`;
+
 export const FormInput = styled(Field)`
+  width: 70%;
   padding: 5px;
   box-sizing: border-box;
 
@@ -116,8 +167,8 @@ export const FormInput = styled(Field)`
     display: none;
   }
 
-  *:disabled {
-    background-color: ${theme.colors.black};
+  &:disabled {
+    background-color: ${theme.colors.opacity};
     color: ${theme.colors.gray};
   }
 `;
@@ -127,10 +178,9 @@ export const FormInputFile = styled(Field)`
   height: 50px;
   width: 50px;
 
-  margin-bottom: 4px;
   background-color: ${theme.colors.white};
   border-radius: 4px;
-  border: 1px solid ${theme.colors.grey};
+  border: 1px solid ${theme.colors.braun};
   outline: none;
 
   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzEiIGhlaWdodD0iNzEiIHZpZXdCb3g9IjAgMCA3MSA3MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTM1LjQ5OTkgNTkuMTY2M1YzNS40OTk3TTM1LjQ5OTkgMzUuNDk5N1YxMS44MzNNMzUuNDk5OSAzNS40OTk3SDU5LjE2NjZNMzUuNDk5OSAzNS40OTk3SDExLjgzMzMiIHN0cm9rZT0iIzExMTExMSIgc3Ryb2tlLW9wYWNpdHk9IjAuNiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+);
@@ -155,6 +205,14 @@ export const FormInputFile = styled(Field)`
   &::file-selector-text {
     display: none;
   }
+`;
+
+export const FormInputArray = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3px;
 `;
 
 export const CloseBtn = styled.button`
@@ -207,18 +265,70 @@ export const DoneBtn = styled.button`
   }
 `;
 
+export const IncrementBtn = styled.button`
+  width: 20px;
+  height: 26px;
+  padding: 0;
+  text-align: center;
+
+  font-family: ${theme.fonts[2]};
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.33;
+  letter-spacing: 0.04em;
+  background-color: ${theme.colors.white};
+  color: ${theme.colors.black};
+  border: 1px solid ${theme.colors.braun};
+  border-radius: 4px;
+  outline: none;
+  transition: ${theme.transition};
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: ${theme.colors.white};
+    background-color: ${theme.colors.braun};
+  }
+`;
+
+export const AddDetailsBtn = styled.button`
+  padding: 5px;
+  text-align: start;
+
+  font-family: ${theme.fonts[2]};
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.33;
+  letter-spacing: 0.04em;
+
+  background-color: ${theme.colors.white};
+  color: ${theme.colors.gray};
+  border: 1px solid ${theme.colors.braun};
+  border-radius: 4px;
+  outline: none;
+
+  transition: ${theme.transition};
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: ${theme.colors.white};
+    background-color: ${theme.colors.braun};
+  }
+`;
+
 export const Error = styled.span`
   position: absolute;
-  top: 18px;
+  bottom: -15px;
   right: 0px;
   z-index: 99;
 
   font-family: ${theme.fonts[2]};
   font-style: normal;
   font-weight: 400;
-  font-size: 10px;
-  line-height: 1.375;
-  letter-spacing: 0.04em;
-  text-align: left;
+  font-size: 8px;
+  text-align: right;
   color: ${theme.colors.braun};
 `;

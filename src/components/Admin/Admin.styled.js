@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { ReactComponent as Logout } from 'images/svg/logout.svg';
 import theme from 'components/baseStyles/Variables.styled';
 
-
 export const AdminContainer = styled.div`
   position: relative;
   padding: 20px;
@@ -12,7 +11,7 @@ export const AdminContainer = styled.div`
 export const Heading = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 `;
 
 export const Table = styled.table`
@@ -40,6 +39,13 @@ export const TableFilter = styled.thead`
 
     border-color: #f7f7f7;
     border-radius: 40px;
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:focus-within {
+      border: 2px solid ${theme.colors.braun};
+    }
   }
 `;
 
@@ -65,7 +71,7 @@ export const TableHead = styled.th`
   font-weight: 700;
   line-height: 1.03;
 
-  border-bottom: 1px solid ${theme.colors.grey};
+  border-bottom: 1px solid ${theme.colors.gray};
 
   @media screen and (min-width: ${theme.breakpoints.tablet}) {
     font-size: 12px;
@@ -117,7 +123,7 @@ export const BtnWrapper = styled.div`
     &:hover,
     &:focus,
     &:active {
-      color: ${theme.colors.accent};
+      color: ${theme.colors.braun};
     }
 
     & > svg {
@@ -156,24 +162,24 @@ export const IconBtn = styled.button`
 export const LearnMoreBtn = styled.button`
   display: block;
   margin-left: auto;
-  padding: 4px;
+  padding: 6px;
 
   font-family: ${theme.fonts[2]};
   font-size: ${theme.fontSizes.extraSmall};
   font-weight: 500;
-  color: ${theme.colors.black};
+  color: ${theme.colors.gray};
 
+  color: ${theme.colors.gray};
+  border-color: #f7f7f7;
+  border-radius: 40px;
   background-color: transparent;
-  border: 1px solid ${theme.colors.grey};
-  box-shadow: ${theme.colors.grey} 3px 3px 5px;
-  border-radius: 4px;
 
   transition: ${theme.transition};
   cursor: pointer;
 
   &:hover,
   &:focus {
-    box-shadow: ${theme.colors.grey} 3px 3px 5px inset;
+    box-shadow: ${theme.colors.gray} 1px 1px 2px inset;
   }
 `;
 
@@ -227,4 +233,28 @@ export const LogoutLabel = styled.span`
   letter-spacing: -0.04em;
   margin-left: 8px;
   transition: all 150ms linear;
+`;
+
+export const ClearFiltersBtn = styled.button`
+  padding: 5px;
+  text-align: start;
+
+  font-family: ${theme.fonts[2]};
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.33;
+
+  color: ${theme.colors.gray};
+  border-color: #f7f7f7;
+  border-radius: 40px;
+  background-color: transparent;
+
+  transition: ${theme.transition};
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    box-shadow: ${theme.colors.gray} 1px 1px 2px inset;
+  }
 `;

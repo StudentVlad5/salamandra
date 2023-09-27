@@ -19,15 +19,12 @@ async function fetchData(pathParams) {
   return await axiosInstance.get();
 }
 
-async function updateUserData(pathParams, body, file) {
+async function updateUserData(pathParams, body) {
   const formData = new FormData();
-  file && formData.set('avatar', file);
   formData.append('email', body.email);
-  formData.append('birthday', body.birthday);
-  formData.append('location', body.location);
   formData.append('phone', body.phone);
+  formData.append('userName', body.name);
   formData.append('role', body.role);
-  formData.append('userName', body.userName);
 
   return await axios.patch(`${BASE_URL}${pathParams}`, formData, {
     headers: {
@@ -39,15 +36,12 @@ async function updateUserData(pathParams, body, file) {
   });
 }
 
-async function createUserData(pathParams, body, file) {
+async function createUserData(pathParams, body) {
   const formData = new FormData();
-  file && formData.set('avatar', file);
-  formData.append('userName', body.userName);
+  formData.append('userName', body.name);
   formData.append('email', body.email);
   formData.append('password', body.password);
   formData.append('phone', body.phone);
-  formData.append('birthday', body.birthday);
-  formData.append('location', body.location);
   formData.append('role', body.role);
 
   return await axios.post(`${BASE_URL}${pathParams}`, formData, {
@@ -71,9 +65,10 @@ async function fetchServiceData(pathParams, body, file) {
   formData.append('currency', body.currency);
   formData.append('alcohol', body.alcohol);
   formData.append('details', body.details);
-  // formData.append('images', file);
   file && formData.set('images', file);
-  // formData.append('size', body.size);
+  formData.append('size', body.size);
+  formData.append('active', body.active);
+  formData.append('admin', body.admin);
 
   return await axios.get(`${BASE_URL}${pathParams}`, formData, {
     headers: {
@@ -87,6 +82,7 @@ async function fetchServiceData(pathParams, body, file) {
 
 async function updateServiceData(pathParams, body, file) {
   const formData = new FormData();
+  file ? formData.set('images', file) : formData.append('images', body.images);
   formData.append('article', body.article);
   formData.append('product', body.product);
   formData.append('category', body.category);
@@ -96,13 +92,14 @@ async function updateServiceData(pathParams, body, file) {
   formData.append('currency', body.currency);
   formData.append('alcohol', body.alcohol);
   formData.append('details', body.details);
-  // formData.append('images', file);
-  file && formData.set('images', file);
-  // formData.append('size', body.size);
+  formData.append('size.value', body.size.value);
+  formData.append('size.mesure', body.size.mesure);
+  formData.append('active', body.active);
+  formData.append('admin', body.admin);
 
   return await axios.patch(`${BASE_URL}${pathParams}`, formData, {
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
       'Access-Control-Expose-Headers': 'Content-Range',
@@ -112,6 +109,7 @@ async function updateServiceData(pathParams, body, file) {
 
 async function createServiceData(pathParams, body, file) {
   const formData = new FormData();
+  file && formData.set('images', file);
   formData.append('article', body.article);
   formData.append('product', body.product);
   formData.append('category', body.category);
@@ -121,13 +119,14 @@ async function createServiceData(pathParams, body, file) {
   formData.append('currency', body.currency);
   formData.append('alcohol', body.alcohol);
   formData.append('details', body.details);
-  // formData.append('images', file);
-  file && formData.set('images', file);
-  // formData.append('size', body.size);
+  formData.append('size.value', body.size.value);
+  formData.append('size.mesure', body.size.mesure);
+  formData.append('active', body.active);
+  formData.append('admin', body.admin);
 
   return await axios.post(`${BASE_URL}${pathParams}`, formData, {
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
       'Access-Control-Expose-Headers': 'Content-Range',

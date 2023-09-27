@@ -14,21 +14,22 @@ export const Nav = styled.nav`
   width: 100%;
   overflow-x: scroll;
   white-space: nowrap;
+  cursor: pointer;
 
   width: 100%;
   overflow-x: scroll;
   white-space: nowrap;
-  position: ${({ isfixed }) => (isfixed  ? 'fixed' : 'static')};
-  top: ${({ isfixed }) => (isfixed ? '0' : 'auto')};
+  position: ${({ isFixed }) => (isFixed ? 'fixed' : 'static')};
+  top: ${({ isFixed }) => (isFixed ? '0' : 'auto')};
   left: 0;
-  background-color: ${({ isfixed }) => (isfixed ? '#ffffff' : 'transparent')};
-  box-shadow: ${({ isfixed }) =>
-    isfixed ? '0px 2px 5px rgba(0, 0, 0, 0.1)' : 'none'};
-  z-index: ${({ isfixed }) => (isfixed ? '1000' : 'auto')};
+  background-color: ${({ isFixed }) => (isFixed ? '#ffffff' : 'transparent')};
+  box-shadow: ${({ isFixed }) =>
+    isFixed ? '0px 2px 5px rgba(0, 0, 0, 0.1)' : 'none'};
+  z-index: ${({ isFixed }) => (isFixed ? '1000' : 'auto')};
   transition: top 0.3s ease;
 
   &::-webkit-scrollbar {
-    height: 2px;
+    height: 3px;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -67,19 +68,30 @@ export const NavListItem = styled.li`
   border: 2px solid ${theme.colors.yellow};
   padding: 6px 13px;
 
-  &:hover {
+  /* transform: ${({ activeNavItem }) => (activeNavItem ? 'scale(1.1)' : '')};
+  background-color: ${({ activeNavItem }) =>
+    activeNavItem ? theme.colors.yellow : ''}; */
+  /* &:hover {
     transform: scale(1.1);
     background: ${theme.colors.yellow};
-  }
+  } */
 
   @media screen and (min-width: ${theme.breakpoints.desktop}) {
     padding: 6px 22px;
+  }
+
+  &.active {
+    transform: scale(1.1);
+    background: ${theme.colors.yellow};
   }
 `;
 
 export const NavListItemLink = styled.a`
   color: ${props => props.theme.orange};
 
+  &.active {
+    color: ${theme.colors.white};
+  }
   font-family: ${theme.fonts[1]};
   font-size: ${theme.fontSizes.small};
   font-style: normal;
@@ -94,7 +106,7 @@ export const NavListItemLink = styled.a`
     font-size: ${theme.fontSizes.large};
   }
 
-  &:hover {
+  /* &:hover {
     color: ${theme.colors.white};
-  }
+  } */
 `;

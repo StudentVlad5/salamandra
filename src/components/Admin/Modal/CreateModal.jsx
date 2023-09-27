@@ -2,25 +2,34 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdClose, MdDone } from 'react-icons/md';
-import { Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import { closeModalWindow } from 'hooks/modalWindow';
 import { cleanModal } from 'redux/modal/operation';
 import { modalComponent } from 'redux/modal/selectors';
+import { selectUser } from 'redux/auth/selectors';
 import { addReload } from 'redux/reload/slice';
 import { createServiceData } from 'services/APIservice';
 import { onFetchError } from 'helpers/Messages/NotifyMessages';
 import { onLoaded, onLoading } from 'helpers/Loader/Loader';
 import { setImage } from 'utils/setimage';
+import schemas from 'utils/schemas';
 import {
+  AddDetailsBtn,
   Backdrop,
   CloseBtn,
   DoneBtn,
   Error,
   FormField,
   FormInput,
+  FormInputArray,
+  FormInputBox,
+  FormInputBoxColumn,
   FormInputFile,
   FormLabel,
+  FormLabelBox,
   FormList,
+  FormRatio,
+  IncrementBtn,
   Modal,
   ModalForm,
 } from './Modal.styled';
@@ -28,11 +37,14 @@ import {
 export const CreateModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [img, setImg] = useState([]);
   const modal = useSelector(modalComponent);
   const dispatch = useDispatch();
+  const userName = useSelector(selectUser);
 
   async function createService(values) {
-    const file = document.querySelector('#images')?.files[0];
+    // const file = document.querySelector('#images')?.files[0];
+    const file = img;
     setIsLoading(true);
     try {
       const { code } = await createServiceData(`/admin/create`, values, file);
@@ -77,25 +89,29 @@ export const CreateModal = () => {
               category: '',
               name: '',
               price: '',
-              currency: '',
+              currency: '₴',
               latin_name: '',
               alcohol: [],
               details: [],
               images: '',
-              //   size: '',
+              size: { value: '', mesure: '' },
+              active: 'false',
+              admin: userName,
             }}
             onSubmit={(values, { setSubmitting }) => {
               createService(values);
               dispatch(addReload(false));
               setSubmitting(false);
-              closeDataModal();
+              closeModalWindow();
+              dispatch(cleanModal());
             }}
             enableReinitialize={true}
+            validationSchema={schemas.schemasMenuPosition}
           >
             {({
               handleChange,
               handleSubmit,
-              handleBlur,
+              setFieldValue,
               isSubmitting,
               values,
               errors,
@@ -177,36 +193,84 @@ export const CreateModal = () => {
                       value={values.latin_name}
                     />
                   </FormField>
-                  <FormField>
-                    <FormLabel htmlFor="alcohol">
-                      <span>Alcohol</span>
-                      {errors.alcohol && touched.alcohol ? (
-                        <Error>{errors.alcohol}</Error>
-                      ) : null}
-                    </FormLabel>
-                    <FormInput
-                      type="text"
-                      id="alcohol"
-                      name="alcohol"
-                      placeholder="Position alcohol"
-                      value={values.alcohol}
-                    />
-                  </FormField>
-                  <FormField>
-                    <FormLabel htmlFor="details">
-                      <span>Details</span>
-                      {errors.details && touched.details ? (
-                        <Error>{errors.details}</Error>
-                      ) : null}
-                    </FormLabel>
-                    <FormInput
-                      type="text"
-                      id="details"
-                      name="details"
-                      placeholder="Position details"
-                      value={values.details}
-                    />
-                  </FormField>
+                  <FieldArray
+                    name="alcohol"
+                    render={arrayHelpers => (
+                      <FormInputArray>
+                        <FormLabel>Alcohol</FormLabel>
+                        <FormInputBoxColumn>
+                          {values.alcohol && values.alcohol.length > 0 ? (
+                            values.alcohol.map((alc, index) => (
+                              <div key={index}>
+                                <FormInput
+                                  name={`alcohol.${index}`}
+                                  value={alc}
+                                />
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)} // remove a detail from the list
+                                >
+                                  -
+                                </IncrementBtn>
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.insert(index, '')} // insert an empty string at a position
+                                >
+                                  +
+                                </IncrementBtn>
+                              </div>
+                            ))
+                          ) : (
+                            <AddDetailsBtn
+                              type="button"
+                              onClick={() => arrayHelpers.push('')}
+                            >
+                              Add an alcohol
+                            </AddDetailsBtn>
+                          )}
+                        </FormInputBoxColumn>
+                      </FormInputArray>
+                    )}
+                  />
+                  <FieldArray
+                    name="details"
+                    render={arrayHelpers => (
+                      <FormInputArray>
+                        <FormLabel>Details</FormLabel>
+                        <FormInputBoxColumn>
+                          {values.details && values.details.length > 0 ? (
+                            values.details.map((detail, index) => (
+                              <div key={index}>
+                                <FormInput
+                                  name={`details.${index}`}
+                                  value={detail}
+                                />
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </IncrementBtn>
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.insert(index, '')}
+                                >
+                                  +
+                                </IncrementBtn>
+                              </div>
+                            ))
+                          ) : (
+                            <AddDetailsBtn
+                              type="button"
+                              onClick={() => arrayHelpers.push('')}
+                            >
+                              Add a detail
+                            </AddDetailsBtn>
+                          )}
+                        </FormInputBoxColumn>
+                      </FormInputArray>
+                    )}
+                  />
                   <FormField>
                     <FormLabel htmlFor="price">
                       <span>Price</span>
@@ -238,6 +302,73 @@ export const CreateModal = () => {
                     />
                   </FormField>
                   <FormField>
+                    <FormLabelBox>
+                      <span>Size</span>
+                      {errors.size?.value &&
+                      touched.size?.value &&
+                      errors.size?.mesure &&
+                      touched.size?.mesure ? (
+                        <Error>{errors.size}</Error>
+                      ) : null}
+
+                      <FormInputBox>
+                        <label htmlFor="size_value">
+                          <FormInput
+                            style={{ width: '70px' }}
+                            type="number"
+                            id="size_value"
+                            name="size.value"
+                            placeholder="value"
+                            value={values.size.value}
+                          />
+                        </label>
+                        <label htmlFor="size_measure">
+                          <FormInput
+                            style={{ width: '70px' }}
+                            type="text"
+                            id="size_measure"
+                            name="size.mesure"
+                            placeholder="measure"
+                            value={values.size.mesure}
+                          />
+                        </label>
+                      </FormInputBox>
+                    </FormLabelBox>
+                  </FormField>
+                  <FormField>
+                    <FormLabelBox>
+                      <span>Active</span>
+                      {errors.active && touched.active ? (
+                        <Error>{errors.active}</Error>
+                      ) : null}
+                    </FormLabelBox>
+                    <FormRatio>
+                      <label
+                        style={{ marginRight: '5px' }}
+                        htmlFor="active_true"
+                      >
+                        <FormInput
+                          type="radio"
+                          id="active_true"
+                          name="active"
+                          value="true"
+                          checked={values.active === 'true'}
+                        />
+                        <span>true</span>
+                      </label>
+                      <label htmlFor="active_false">
+                        <FormInput
+                          type="radio"
+                          id="active_false"
+                          name="active"
+                          value="false"
+                          checked={values.active === 'false'}
+                        />
+                        <span>false</span>
+                      </label>
+                    </FormRatio>
+                  </FormField>
+                  <FormField>
                     <FormLabel htmlFor="images">
                       <span>Image</span>
                       {errors.images && touched.images ? (
@@ -257,7 +388,9 @@ export const CreateModal = () => {
                         accept=".jpg,.jpeg,.webp,.png,.gif"
                         onChange={e => {
                           handleChange(e);
+                          setImg(e.target.files[0]);
                           setImage(e);
+                          setFieldValue('images', e.target.files[0]);
                         }}
                       />
                     ) : (
@@ -268,26 +401,13 @@ export const CreateModal = () => {
                         accept=".jpg,.jpeg,.webp,.png,.gif"
                         onChange={e => {
                           handleChange(e);
+                          setImg(e.target.files[0]);
                           setImage(e);
+                          setFieldValue('images', e.target.files[0]);
                         }}
                       />
                     )}
                   </FormField>
-                  {/* <FormField>
-                    <FormLabel htmlFor="size">
-                      <span>Size</span>
-                      {errors.size && touched.size ? (
-                        <Error>{errors.size}</Error>
-                      ) : null}
-                    </FormLabel>
-                    <FormInput
-                      type="text"
-                      id="size"
-                      name="size"
-                      placeholder="Position size"
-                      value={values.size}
-                    />
-                  </FormField> */}
                 </FormList>
 
                 <DoneBtn

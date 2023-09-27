@@ -2,25 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdClose, MdDone } from 'react-icons/md';
-import { Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
 import { closeModalWindow } from 'hooks/modalWindow';
 import { cleanModal } from 'redux/modal/operation';
 import { modalComponent } from 'redux/modal/selectors';
+import { selectUser } from 'redux/auth/selectors';
 import { addReload } from 'redux/reload/slice';
 import { fetchData, updateServiceData } from 'services/APIservice'; //fetchServiceData,
 import { onFetchError } from 'helpers/Messages/NotifyMessages';
 import { onLoaded, onLoading } from 'helpers/Loader/Loader';
 import { setImage } from 'utils/setimage';
+import schemas from 'utils/schemas';
 import {
+  AddDetailsBtn,
   Backdrop,
   CloseBtn,
   DoneBtn,
   Error,
   FormField,
   FormInput,
+  FormInputArray,
+  FormInputBox,
+  FormInputBoxColumn,
   FormInputFile,
   FormLabel,
+  FormLabelBox,
   FormList,
+  FormRatio,
+  IncrementBtn,
   Modal,
   ModalForm,
 } from './Modal.styled';
@@ -29,10 +38,12 @@ export const EditModal = () => {
   const { BASE_URL_IMG } = window.global;
 
   const [dataUpdate, setDataUpdate] = useState([]);
+  const [img, setImg] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const modal = useSelector(modalComponent);
   const dispatch = useDispatch();
+  const userName = useSelector(selectUser);
 
   const itemForFetch = `/admin/${modal.id}`;
 
@@ -57,7 +68,11 @@ export const EditModal = () => {
   }, [itemForFetch, modal.id]);
 
   async function editPosition(values) {
-    const file = document.querySelector('#images')?.files[0];
+    const file = img;
+
+    // console.log('editPosition ~ file:', file);
+    // console.log('editPosition ~ values:', values);
+
     setIsLoading(true);
     try {
       const { code } = await updateServiceData(
@@ -106,24 +121,31 @@ export const EditModal = () => {
               category: dataUpdate?.category ? dataUpdate.category : '',
               name: dataUpdate?.name ? dataUpdate.name : '',
               price: dataUpdate?.price ? dataUpdate.price : '',
-              currency: dataUpdate?.currency ? dataUpdate.currency : '',
+              currency: dataUpdate?.currency ? dataUpdate.currency : '₴',
               latin_name: dataUpdate?.latin_name ? dataUpdate.latin_name : '',
               alcohol: dataUpdate?.alcohol ? dataUpdate.alcohol : [],
               details: dataUpdate?.details ? dataUpdate.details : [],
               images: '',
-              //   size: dataUpdate?.size ? dataUpdate.size : '',
+              size: dataUpdate?.size
+                ? dataUpdate.size
+                : { value: '', mesure: '' },
+              active: dataUpdate?.active ? dataUpdate.active : 'false',
+              admin: userName,
             }}
             onSubmit={(values, { setSubmitting }) => {
               editPosition(values);
               dispatch(addReload(false));
-              closeDataModal();
               setSubmitting(false);
+              dispatch(cleanModal());
+              closeModalWindow();
             }}
             enableReinitialize={true}
+            validationSchema={schemas.schemasMenuPosition}
           >
             {({
               handleChange,
               handleSubmit,
+              setFieldValue,
               isSubmitting,
               values,
               errors,
@@ -132,9 +154,7 @@ export const EditModal = () => {
               <ModalForm
                 autoComplete="off"
                 onSubmit={handleSubmit}
-                onChange={e => {
-                  handleChange(e);
-                }}
+                onChange={handleChange}
               >
                 <FormList>
                   <FormField>
@@ -174,15 +194,13 @@ export const EditModal = () => {
                         <Error>{errors.category}</Error>
                       ) : null}
                     </FormLabel>
-                    <div style={{ position: 'relative' }}>
-                      <FormInput
-                        type="text"
-                        id="category"
-                        name="category"
-                        placeholder="Type category"
-                        value={values.category}
-                      />
-                    </div>
+                    <FormInput
+                      type="text"
+                      id="category"
+                      name="category"
+                      placeholder="Type category"
+                      value={values.category}
+                    />
                   </FormField>
                   <FormField>
                     <FormLabel htmlFor="name">
@@ -244,35 +262,144 @@ export const EditModal = () => {
                       value={values.latin_name}
                     />
                   </FormField>
+                  <FieldArray
+                    name="alcohol"
+                    render={arrayHelpers => (
+                      <FormInputArray>
+                        <FormLabel>Alcohol</FormLabel>
+                        <FormInputBoxColumn>
+                          {values.alcohol && values.alcohol.length > 0 ? (
+                            values.alcohol.map((alc, index) => (
+                              <div key={index}>
+                                <FormInput name={`alcohol.${index}`} />
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)} // remove a detail from the list
+                                >
+                                  -
+                                </IncrementBtn>
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.insert(index, '')} // insert an empty string at a position
+                                >
+                                  +
+                                </IncrementBtn>
+                              </div>
+                            ))
+                          ) : (
+                            <AddDetailsBtn
+                              type="button"
+                              onClick={() => arrayHelpers.push('')}
+                            >
+                              Add an alcohol
+                            </AddDetailsBtn>
+                          )}
+                        </FormInputBoxColumn>
+                      </FormInputArray>
+                    )}
+                  />
+                  <FieldArray
+                    name="details"
+                    render={arrayHelpers => (
+                      <FormInputArray>
+                        <FormLabel>Details</FormLabel>
+                        <FormInputBoxColumn>
+                          {values.details && values.details.length > 0 ? (
+                            values.details.map((detail, index) => (
+                              <div key={index}>
+                                <FormInput name={`details.${index}`} />
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </IncrementBtn>
+                                <IncrementBtn
+                                  type="button"
+                                  onClick={() => arrayHelpers.insert(index, '')}
+                                >
+                                  +
+                                </IncrementBtn>
+                              </div>
+                            ))
+                          ) : (
+                            <AddDetailsBtn
+                              type="button"
+                              onClick={() => arrayHelpers.push('')}
+                            >
+                              Add a detail
+                            </AddDetailsBtn>
+                          )}
+                        </FormInputBoxColumn>
+                      </FormInputArray>
+                    )}
+                  />
                   <FormField>
-                    <FormLabel htmlFor="alcohol">
-                      <span>Alcohol</span>
-                      {errors.alcohol && touched.alcohol ? (
-                        <Error>{errors.alcohol}</Error>
+                    <FormLabelBox>
+                      <span>Size</span>
+                      {errors.size?.value &&
+                      touched.size?.value &&
+                      errors.size?.mesure &&
+                      touched.size?.mesure ? (
+                        <Error>{errors.size}</Error>
                       ) : null}
-                    </FormLabel>
-                    <FormInput
-                      type="text"
-                      id="alcohol"
-                      name="alcohol"
-                      placeholder="Type alcohol"
-                      value={values.alcohol}
-                    />
+
+                      <FormInputBox>
+                        <label htmlFor="size_value">
+                          <FormInput
+                            style={{ width: '70px' }}
+                            type="number"
+                            id="size_value"
+                            name="size.value"
+                            placeholder="value"
+                            value={values.size.value}
+                          />
+                        </label>
+                        <label htmlFor="size_measure">
+                          <FormInput
+                            style={{ width: '70px' }}
+                            type="text"
+                            id="size_measure"
+                            name="size.mesure"
+                            placeholder="measure"
+                            value={values.size.mesure}
+                          />
+                        </label>
+                      </FormInputBox>
+                    </FormLabelBox>
                   </FormField>
                   <FormField>
-                    <FormLabel htmlFor="details">
-                      <span>Details</span>
-                      {errors.details && touched.details ? (
-                        <Error>{errors.details}</Error>
+                    <FormLabel htmlFor="active">
+                      <span>Active</span>
+                      {errors.active && touched.active ? (
+                        <Error>{errors.active}</Error>
                       ) : null}
                     </FormLabel>
-                    <FormInput
-                      type="text"
-                      id="details"
-                      name="details"
-                      placeholder="Type details"
-                      value={values.details}
-                    />
+                    <FormRatio>
+                      <label
+                        style={{ marginRight: '5px' }}
+                        htmlFor="active_true"
+                      >
+                        <FormInput
+                          type="radio"
+                          id="active_true"
+                          name="active"
+                          value="true"
+                          checked={values.active === true}
+                        />
+                        <span>true</span>
+                      </label>
+                      <label htmlFor="active_false">
+                        <FormInput
+                          type="radio"
+                          id="active_false"
+                          name="active"
+                          value="false"
+                          checked={values.active === false}
+                        />
+                        <span>false</span>
+                      </label>
+                    </FormRatio>
                   </FormField>
                   <FormField>
                     <FormLabel htmlFor="images">
@@ -281,13 +408,16 @@ export const EditModal = () => {
                         <Error>{errors.images}</Error>
                       ) : null}
                     </FormLabel>
-                    {dataUpdate.images ? (
+                    {dataUpdate.images && dataUpdate.images !== 'none' ? (
                       <FormInputFile
                         style={{
                           backgroundImage: `url(${
                             BASE_URL_IMG + dataUpdate.images
                           })`,
-                          backgroundSize: '20px ,20px',
+                          // backgroundSize: '20px ,20px',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundSize: 'cover',
                         }}
                         type="file"
                         id="images"
@@ -296,6 +426,8 @@ export const EditModal = () => {
                         accept=".jpg,.jpeg,.webp,.png,.gif"
                         onChange={e => {
                           handleChange(e);
+                          setFieldValue('images', dataUpdate.images);
+                          setImg(e.target.files[0]);
                           setImage(e);
                         }}
                       />
@@ -307,28 +439,19 @@ export const EditModal = () => {
                         accept=".jpg,.jpeg,.webp,.png,.gif"
                         onChange={e => {
                           handleChange(e);
+                          setFieldValue('images', e.target.files[0]);
+                          setImg(e.target.files[0]);
                           setImage(e);
                         }}
                       />
                     )}
                   </FormField>
-                  {/* <FormField>
-                    <FormLabel htmlFor="size">
-                      <span>Size</span>
-                      {errors.size && touched.size ? (
-                        <Error>{errors.size}</Error>
-                      ) : null}
+                  <FormField>
+                    <FormLabel htmlFor="admin">
+                      <span>Created / edited by</span>
                     </FormLabel>
-                    <div style={{ position: 'relative' }}>
-                      <FormInput
-                        type="text"
-                        id="size"
-                        name="size"
-                        placeholder="Type size"
-                        value={values.size}
-                      />
-                    </div>
-                  </FormField> */}
+                    <FormInput type="text" id="admin" name="admin" disabled />
+                  </FormField>
                 </FormList>
 
                 <DoneBtn

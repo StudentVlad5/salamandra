@@ -1,6 +1,6 @@
-import React from "react";
-import { SEO } from "utils/SEO";
-import { Menu } from "components/Menu/Menu";
+import React from 'react';
+import { SEO } from 'utils/SEO';
+import { Menu } from 'components/Menu/Menu';
 
 const LandingPage = ({ catalog }) => {
   return (

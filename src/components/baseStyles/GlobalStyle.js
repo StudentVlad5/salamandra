@@ -1,8 +1,12 @@
-import "modern-normalize";
-import { createGlobalStyle } from "styled-components";
-import theme from "./Variables.styled";
+import 'modern-normalize';
+import { createGlobalStyle } from 'styled-components';
+import theme from './Variables.styled';
 
 export const GlobalStyle = createGlobalStyle`
+html{
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Inria Sans', sans-serif;
   font-family: 'Kumar One', cursive;
@@ -207,4 +211,107 @@ img {
         border-color: ${theme.colors.braun};
         color: ${theme.colors.white} !important;
     }
+
+    //-----react-select-----//
+
+.react-select-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 15px 10px 15px;
+
+  font-family:  ${theme.fonts[2]};
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.375;
+  letter-spacing: 0.04em;
+  text-align: left;
+  color: ${theme.colors.gray};
+
+  &::placeholder {
+    color: rgba(27, 27, 27, 0.6);
+  }
+  height: 40px;
+  width: 100%;
+
+  margin-bottom: 16px;
+
+  background: ${theme.colors.black};
+  border: 1px solid ${theme.colors.braun};
+  border-radius: 40px;
+  outline: none;
+  transition: all 0.25s ease-in;
+  &:hover {
+    outline: 2px solid ${theme.colors.braun};
+  }
+
+  &:focus {
+    outline: 3px solid ${theme.colors.braun};
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+
+  @media screen and (min-width: 768px) {
+    font-size: 16px;
+    height: 48px;
+    margin-bottom: 20px;
+  }
+}
+
+.react-select__control, .react-select__control--is-focused, .react-select__control--menu-is-open {
+width: 100%;
+padding: 0!important;
+margin: 0!important;
+border: none!important;
+box-shadow: none!important;
+
+background-color: transparent!important;
+}
+
+.react-select__input-container {
+padding: 0!important;
+margin: 0!important;
+}
+
+.react-select__placeholder {
+padding: 0!important;
+margin: 0!important;
+
+color:  ${theme.colors.black}!important;
+}
+
+.react-select__indicators {
+padding: 0!important;
+margin: 0!important;
+}
+
+.react-select__menu {
+}
+
+.react-select__menu-list {
+}
+
+.react-select__option--is-focused {
+background-color: ${theme.colors.black}!important;
+}
+
+.react-select__option--is-selected {
+background-color: ${theme.colors.braun}!important;
+}
+
+
+.react-select__input-container {
+padding: 0!important;
+margin: 0!important;
+}
+
+.react-select__value-container {
+padding: 0!important;
+margin: 0!important;
+}
 `;

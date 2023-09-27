@@ -96,8 +96,8 @@ export const Header = ({catalog, isLoading, error}) => {
             />
           </picture>
 
-          <Title>Salamandra</Title>
-          <TitleDiscr>Cocktail bar</TitleDiscr>
+          <Title>Salamandra.</Title>
+          <TitleDiscr>Коктейль бар</TitleDiscr>
 
           <picture style={{ display: 'contents' }}>
             <source

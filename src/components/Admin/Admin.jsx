@@ -6,6 +6,7 @@ import { openModalWindow } from 'hooks/modalWindow';
 import { addModal } from 'redux/modal/operation';
 import { addReload } from 'redux/reload/slice';
 import { reloadValue } from 'redux/reload/selectors';
+import { logOut } from 'redux/auth/operations';
 import { fetchData, deleteData } from 'services/APIservice';
 import { PaginationBlock } from 'helpers/Pagination/Pagination';
 import { onLoading, onLoaded } from 'helpers/Loader/Loader';
@@ -27,8 +28,8 @@ import {
   TableFilter,
   TableHead,
   TableRow,
+  ClearFiltersBtn,
 } from './Admin.styled';
-import { logOut } from 'redux/auth/operations';
 
 export const Admin = () => {
   const [positions, setPositions] = useState([]);
@@ -43,31 +44,36 @@ export const Admin = () => {
   const [filterLatinName, setFilterLatinName] = useState('');
   const [filterAlcohol, setFilterAlcohol] = useState('');
   const [filterDetails, setFilterDetails] = useState('');
-  //   const [filterSize, setFilterSize] = useState('');
+  const [filterSize, setFilterSize] = useState('');
+  const [filterUnit, setFilterUnit] = useState('');
   const [filterPrice, setFilterPrice] = useState('');
   const [filterCurrency, setFilterCurrency] = useState('');
   const [filterImage, setFilterImage] = useState('');
+  const [filterActive, setFilterActive] = useState('');
+  const [filterAdmin, setFilterAdmin] = useState('');
 
   //   console.log('filterPositions:', filterPositions);
   //   console.log('filterPrice:', filterPrice);
 
   useEffect(() => {
-    (async function getData() {
-      setIsLoading(true);
-      try {
-        const { data } = await fetchData('/admin');
-        setPositions(data);
-        setFilterPositions(data);
-        if (!data) {
-          return onFetchError('Whoops, something went wrong');
-        }
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    getData();
   }, [reload]);
+
+  async function getData() {
+    setIsLoading(true);
+    try {
+      const { data } = await fetchData('/admin');
+      setPositions(data);
+      setFilterPositions(data);
+      if (!data) {
+        return onFetchError('Whoops, something went wrong');
+      }
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   async function deletePosition(id) {
     setIsLoading(true);
@@ -103,9 +109,12 @@ export const Admin = () => {
       case 'filterDetails':
         setFilterDetails(e.currentTarget.value);
         break;
-      //   case 'filterSize':
-      //     setFilterSize(e.currentTarget.value);
-      //     break;
+      case 'filterSize':
+        setFilterSize(e.currentTarget.value);
+        break;
+      case 'filterUnit':
+        setFilterUnit(e.currentTarget.value);
+        break;
       case 'filterPrice':
         setFilterPrice(e.currentTarget.value);
         break;
@@ -114,6 +123,12 @@ export const Admin = () => {
         break;
       case 'filterImage':
         setFilterImage(e.currentTarget.value);
+        break;
+      case 'filterActive':
+        setFilterActive(e.currentTarget.value);
+        break;
+      case 'filterAdmin':
+        setFilterAdmin(e.currentTarget.value);
         break;
       default:
         break;
@@ -140,74 +155,67 @@ export const Admin = () => {
           .toString()
           .toLowerCase()
           .includes(filterDetails) &&
-        // item.size.toString().toLowerCase().includes(filterSize) &&
+        item.size.value.toString().toLowerCase().includes(filterSize) &&
+        item.size.mesure.toString().toLowerCase().includes(filterUnit) &&
         item.price.toString().toLowerCase().includes(filterPrice) &&
         item.currency.toString().toLowerCase().includes(filterCurrency) &&
-        item.images.toString().toLowerCase().includes(filterImage)
+        item.images.toString().toLowerCase().includes(filterImage) &&
+        item.active.toString().toLowerCase().includes(filterActive) &&
+        item.admin.toString().toLowerCase().includes(filterAdmin)
       ) {
         peremOfFilter.push(item);
       }
     });
 
     setFilterPositions(peremOfFilter);
-    // console.log('peremOfFilter:', peremOfFilter);
   };
 
   const cleanFilterPositions = e => {
     e.preventDefault();
-    let filterG = '';
-    let filterSg = '';
+    let filterPr = '';
+    let filterCa = '';
     let filterN = '';
     let filterLn = '';
     let filterA = '';
     let filterD = '';
-    // let filterS = '';
+    let filterS = '';
+    let filterU = '';
     let filterP = '';
     let filterC = '';
     let filterI = '';
-    e.currentTarget.name === 'clearFilterProduct'
-      ? setFilterProduct(filterG)
-      : (filterG = filterProduct);
-    e.currentTarget.name === 'clearFilterCategory'
-      ? setFilterCategory(filterSg)
-      : (filterSg = filterCategory);
-    e.currentTarget.name === 'clearFilterName'
-      ? setFilterName(filterN)
-      : (filterN = filterName);
-    e.currentTarget.name === 'clearFilterLatinName'
-      ? setFilterLatinName(filterLn)
-      : (filterN = filterLatinName);
-    e.currentTarget.name === 'clearFilterAlcohol'
-      ? setFilterAlcohol(filterA)
-      : (filterA = filterAlcohol);
-    e.currentTarget.name === 'clearFilterDetails'
-      ? setFilterDetails(filterD)
-      : (filterD = filterDetails);
-    // e.currentTarget.name === 'clearFilterSize'
-    //   ? setFilterSize(filterS)
-    //   : (filterS = filterSize);
-    e.currentTarget.name === 'clearFilterPrice'
-      ? setFilterPrice(filterP)
-      : (filterP = filterPrice);
-    e.currentTarget.name === 'clearFilterCurrency'
-      ? setFilterCurrency(filterC)
-      : (filterC = filterCurrency);
-    e.currentTarget.name === 'clearFilterImage'
-      ? setFilterCurrency(filterI)
-      : (filterI = filterImage);
+    let filterAct = '';
+    let filterAd = '';
+
+    e.currentTarget.name === 'clearFilterProduct' ? setFilterProduct(filterPr) : (filterPr = filterProduct);
+    e.currentTarget.name === 'clearFilterCategory' ? setFilterCategory(filterCa): (filterCa = filterCategory);
+    e.currentTarget.name === 'clearFilterName' ? setFilterName(filterN) :(filterN = filterName);
+    e.currentTarget.name === 'clearFilterLatinName' ? setFilterLatinName(filterLn) : (filterLn = filterLatinName);
+    e.currentTarget.name === 'clearFilterAlcohol' ? setFilterAlcohol(filterA) : (filterA = filterAlcohol);
+    e.currentTarget.name === 'clearFilterDetails' ? setFilterDetails(filterD) : (filterD = filterDetails);
+    e.currentTarget.name === 'clearFilterSize' ? setFilterSize(filterS) : (filterS = filterSize);
+    e.currentTarget.name === 'clearFilterUnit' ? setFilterUnit(filterU) : (filterS = filterUnit);
+    e.currentTarget.name === 'clearFilterPrice' ? setFilterPrice(filterP) : (filterP = filterPrice);
+    e.currentTarget.name === 'clearFilterCurrency' ? setFilterCurrency(filterC) : (filterC = filterCurrency);
+    e.currentTarget.name === 'clearFilterImage' ? setFilterCurrency(filterI) : (filterI = filterImage);
+    e.currentTarget.name === 'clearFilterActive' ? setFilterCurrency(filterAct): (filterAct = filterActive);
+    e.currentTarget.name === 'clearFilterAdmin' ? setFilterCurrency(filterAd) : (filterAd = filterAdmin);
+    
     const peremOfFilter = [];
     positions.map(item => {
       if (
-        item.product?.toString().toLowerCase().includes(filterG) &&
-        item.category?.toString().toLowerCase().includes(filterSg) &&
+        item.product?.toString().toLowerCase().includes(filterPr) &&
+        item.category?.toString().toLowerCase().includes(filterCa) &&
         item.name?.toString().toLowerCase().includes(filterN) &&
         item.latin_name?.toString().toLowerCase().includes(filterLn) &&
         item.alcohol?.toString().toLowerCase().includes(filterA) &&
         item.details?.toString().toLowerCase().includes(filterD) &&
-        // item.size?.toString().toLowerCase().includes(filterS) &&
+        item.size?.value?.toString().toLowerCase().includes(filterS) &&
+        item.size?.mesure?.toString().toLowerCase().includes(filterU) &&
         item.price?.toString().toLowerCase().includes(filterP) &&
         item.currency?.toString().toLowerCase().includes(filterC) &&
-        item.images?.toString().toLowerCase().includes(filterI)
+        item.images?.toString().toLowerCase().includes(filterI) &&
+        item.active?.toString().toLowerCase().includes(filterAct) &&
+        item.admin?.toString().toLowerCase().includes(filterAd)
       ) {
         peremOfFilter.push(item);
       }
@@ -215,6 +223,23 @@ export const Admin = () => {
     });
 
     setFilterPositions(peremOfFilter);
+  };
+
+  const clearAllFilters = e => {
+    getData();
+    setFilterProduct('');
+    setFilterCategory('');
+    setFilterName('');
+    setFilterLatinName('');
+    setFilterAlcohol('');
+    setFilterDetails('');
+    setFilterSize('');
+    setFilterUnit('');
+    setFilterPrice('');
+    setFilterCurrency('');
+    setFilterImage('');
+    setFilterActive('');
+    setFilterAdmin('');
   };
 
   const handleSearchOnEnter = e => {
@@ -267,11 +292,23 @@ export const Admin = () => {
         </Heading>
         {isLoading ? onLoading() : onLoaded()}
         {error && onFetchError('Whoops, something went wrong')}
-        {!isLearnMore ? (
-          <LearnMoreBtn onClick={toggleLearnMore}>Less</LearnMoreBtn>
-        ) : (
-          <LearnMoreBtn onClick={toggleLearnMore}>More</LearnMoreBtn>
-        )}
+        <div style={{ display: 'flex' }}>
+          <ClearFiltersBtn
+            type="button"
+            id="filters"
+            name="clearFilters"
+            onClick={e => {
+              clearAllFilters(e);
+            }}
+          >
+            Clear all filters
+          </ClearFiltersBtn>
+          {!isLearnMore ? (
+            <LearnMoreBtn onClick={toggleLearnMore}>Less details</LearnMoreBtn>
+          ) : (
+            <LearnMoreBtn onClick={toggleLearnMore}>More details</LearnMoreBtn>
+          )}
+        </div>
         <Table>
           <TableFilter>
             <TableRow>
@@ -296,7 +333,10 @@ export const Admin = () => {
                     type="button"
                     id="filterProduct"
                     name="clearFilterProduct"
-                    onClick={e => cleanFilterPositions(e)}
+                    onClick={e => {
+                      cleanFilterPositions(e);
+                      setFilterProduct('');
+                    }}
                   >
                     <MdClose />
                   </button>
@@ -323,7 +363,10 @@ export const Admin = () => {
                     type="button"
                     id="filterCategory"
                     name="clearFilterCategory"
-                    onClick={e => cleanFilterPositions(e)}
+                    onClick={e => {
+                      cleanFilterPositions(e);
+                      setFilterCategory('');
+                    }}
                   >
                     <MdClose />
                   </button>
@@ -350,7 +393,10 @@ export const Admin = () => {
                     type="button"
                     id="filterName"
                     name="clearFilterName"
-                    onClick={e => cleanFilterPositions(e)}
+                    onClick={e => {
+                      cleanFilterPositions(e);
+                      setFilterName('');
+                    }}
                   >
                     <MdClose />
                   </button>
@@ -377,7 +423,10 @@ export const Admin = () => {
                     type="button"
                     id="filterPrice"
                     name="clearFilterPrice"
-                    onClick={e => cleanFilterPositions(e)}
+                    onClick={e => {
+                      cleanFilterPositions(e);
+                      setFilterPrice('');
+                    }}
                   >
                     <MdClose />
                   </button>
@@ -404,7 +453,10 @@ export const Admin = () => {
                     type="button"
                     id="filterCurrency"
                     name="clearFilterCurrency"
-                    onClick={e => cleanFilterPositions(e)}
+                    onClick={e => {
+                      cleanFilterPositions(e);
+                      setFilterCurrency('');
+                    }}
                   >
                     <MdClose />
                   </button>
@@ -433,7 +485,10 @@ export const Admin = () => {
                         type="button"
                         id="filterAlcohol"
                         name="clearFilterAlcohol"
-                        onClick={e => cleanFilterPositions(e)}
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterAlcohol('');
+                        }}
                       >
                         <MdClose />
                       </button>
@@ -460,7 +515,10 @@ export const Admin = () => {
                         type="button"
                         id="filterDetails"
                         name="clearFilterDetails"
-                        onClick={e => cleanFilterPositions(e)}
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterDetails('');
+                        }}
                       >
                         <MdClose />
                       </button>
@@ -487,7 +545,10 @@ export const Admin = () => {
                         type="button"
                         id="filterLatinName"
                         name="clearFilterLatinName"
-                        onClick={e => cleanFilterPositions(e)}
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterLatinName('');
+                        }}
                       >
                         <MdClose />
                       </button>
@@ -514,13 +575,16 @@ export const Admin = () => {
                         type="button"
                         id="filterImage"
                         name="clearFilterImage"
-                        onClick={e => cleanFilterPositions(e)}
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterImage('');
+                        }}
                       >
                         <MdClose />
                       </button>
                     </BtnWrapper>
                   </TableHead>
-                  {/* <TableHead>
+                  <TableHead>
                     <input
                       type="text"
                       name="filterSize"
@@ -532,7 +596,7 @@ export const Admin = () => {
                     <BtnWrapper>
                       <button
                         type="button"
-                         id="filterSize"
+                        id="filterSize"
                         onClick={e => startFilterPositions(e)}
                       >
                         <MdDone />
@@ -541,12 +605,105 @@ export const Admin = () => {
                         type="button"
                         id="filterSize"
                         name="clearFilterSize"
-                        onClick={e => cleanFilterPositions(e)}
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterSize('');
+                        }}
                       >
                         <MdClose />
                       </button>
                     </BtnWrapper>
-                  </TableHead> */}
+                  </TableHead>
+                  <TableHead>
+                    <input
+                      type="text"
+                      name="filterUnit"
+                      placeholder="Measure"
+                      value={filterUnit}
+                      onKeyDown={e => handleSearchOnEnter(e)}
+                      onChange={e => handleChangeFilter(e)}
+                    />
+                    <BtnWrapper>
+                      <button
+                        type="button"
+                        id="filterUnit"
+                        onClick={e => startFilterPositions(e)}
+                      >
+                        <MdDone />
+                      </button>
+                      <button
+                        type="button"
+                        id="filterUnit"
+                        name="clearFilterUnit"
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterUnit('');
+                        }}
+                      >
+                        <MdClose />
+                      </button>
+                    </BtnWrapper>
+                  </TableHead>
+                  <TableHead>
+                    <input
+                      type="text"
+                      name="filterActive"
+                      placeholder="Active"
+                      value={filterActive}
+                      onKeyDown={e => handleSearchOnEnter(e)}
+                      onChange={e => handleChangeFilter(e)}
+                    />
+                    <BtnWrapper>
+                      <button
+                        type="button"
+                        id="filterActive"
+                        onClick={e => startFilterPositions(e)}
+                      >
+                        <MdDone />
+                      </button>
+                      <button
+                        type="button"
+                        id="filterActive"
+                        name="clearFilterActive"
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterActive('');
+                        }}
+                      >
+                        <MdClose />
+                      </button>
+                    </BtnWrapper>
+                  </TableHead>
+                  <TableHead>
+                    <input
+                      type="text"
+                      name="filterAdmin"
+                      placeholder="Admin"
+                      value={filterAdmin}
+                      onKeyDown={e => handleSearchOnEnter(e)}
+                      onChange={e => handleChangeFilter(e)}
+                    />
+                    <BtnWrapper>
+                      <button
+                        type="button"
+                        id="filterAdmin"
+                        onClick={e => startFilterPositions(e)}
+                      >
+                        <MdDone />
+                      </button>
+                      <button
+                        type="button"
+                        id="filterAdmin"
+                        name="clearFilterAdmin"
+                        onClick={e => {
+                          cleanFilterPositions(e);
+                          setFilterAdmin('');
+                        }}
+                      >
+                        <MdClose />
+                      </button>
+                    </BtnWrapper>
+                  </TableHead>
                 </>
               )}
               <TableHead>
@@ -576,7 +733,10 @@ export const Admin = () => {
                   <TableHead>Details</TableHead>
                   <TableHead>LatinName</TableHead>
                   <TableHead>Image</TableHead>
-                  {/* <TableHead>Size</TableHead> */}
+                  <TableHead>Size</TableHead>
+                  <TableHead>Measure</TableHead>
+                  <TableHead>Active</TableHead>
+                  <TableHead>Admin</TableHead>
                 </>
               )}
               <TableHead>Action</TableHead>
@@ -598,8 +758,15 @@ export const Admin = () => {
                         <TableData>{position.alcohol}</TableData>
                         <TableData>{position.details}</TableData>
                         <TableData>{position.latin_name}</TableData>
-                        <TableData>{position.images ? 'yes' : 'no'}</TableData>
-                        {/* <TableData>{position.size}</TableData> */}
+                        <TableData>
+                          {position.images && position.images !== 'none'
+                            ? 'yes'
+                            : 'no'}
+                        </TableData>
+                        <TableData>{position.size.value}</TableData>
+                        <TableData>{position.size.mesure}</TableData>
+                        <TableData>{position.active.toString()}</TableData>
+                        <TableData>{position.admin}</TableData>
                       </>
                     )}
                     <TableData>

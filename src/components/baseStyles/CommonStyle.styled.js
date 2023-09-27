@@ -2,20 +2,18 @@ import styled from 'styled-components';
 import theme from 'components/baseStyles/Variables.styled';
 
 const Container = styled.div`
-  /* padding: 0 110px 25px; */
+  padding: 0 25px;
   display: flex;
   justify-content: center;
   align-items: center;
   /* max-width: ${theme.breakpoints.mobile_max}; */
-
-  padding: 0 25px;
 
   @media screen and (min-width: ${theme.breakpoints.tablet}) {
     /* padding: 15px 238px 50px; */
     /* max-width: ${theme.breakpoints.tablet_max}; */
   }
   @media screen and (min-width: ${theme.breakpoints.desktop}) {
-    /* padding: 15px 238px 50px; */
+    padding: 0 0 50px;
     max-width: ${theme.breakpoints.desktop};
   }
 `;
