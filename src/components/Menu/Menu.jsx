@@ -23,7 +23,7 @@ import {
   Details,
 } from './Menu.styled';
 
-export const Menu = ({ catalog }) => {
+export const Menu = ({ catalog, activeSection }) => {
   const { BASE_URL_IMG } = window.global;
   const [menu, setMenu] = useState([]);
   const [, setGroup] = useState([]);
@@ -69,7 +69,12 @@ export const Menu = ({ catalog }) => {
       <MenuSection>
         {catalog &&
           catalog?.map(it => (
-            <div style={{ width: '100%' }} key={uuidv4()}>
+            <div
+              className="menu-section"
+              style={{ width: '100%' }}
+              key={uuidv4()}
+              id={it}
+            >
               <MenuTitle id={it}>{it}</MenuTitle>
               {subGroup[`${it}`]?.map(cat => (
                 <div key={uuidv4()}>
@@ -79,7 +84,10 @@ export const Menu = ({ catalog }) => {
                       item =>
                         item.category === cat &&
                         item?.active && (
-                          <MenuListItem key={uuidv4()}>
+                          <MenuListItem
+                            key={uuidv4()}
+                            className={activeSection === it ? 'active' : ''}
+                          >
                             {item.images !== 'none' && item.images && (
                               <Img
                                 src={BASE_URL_IMG + item.images}

@@ -70,7 +70,7 @@ const schemasMenuPosition = Yup.object().shape({
   name: Yup.string().required('Require field'),
   latin_name: Yup.string().required('Require field'),
   alcohol: Yup.mixed(),
-  details: Yup.array().nullable().min(2).required(),
+  details: Yup.mixed(),
   price: Yup.number().required('Require field'),
   currency: Yup.string(),
   images: Yup.string(),

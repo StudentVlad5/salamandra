@@ -82,7 +82,9 @@ async function fetchServiceData(pathParams, body, file) {
 
 async function updateServiceData(pathParams, body, file) {
   const formData = new FormData();
-  file ? formData.set('images', file) : formData.append('images', body.images);
+  file
+    ? formData.set('images', file, file.name.replaceAll(' ', '_'))
+    : formData.append('images', body.images);
   formData.append('article', body.article);
   formData.append('product', body.product);
   formData.append('category', body.category);
@@ -90,8 +92,12 @@ async function updateServiceData(pathParams, body, file) {
   formData.append('latin_name', body.latin_name);
   formData.append('price', body.price);
   formData.append('currency', body.currency);
-  formData.append('alcohol', body.alcohol);
-  formData.append('details', body.details);
+  body.alcohol.forEach(value => {
+    formData.append('alcohol[]', value);
+  });
+  body.details.forEach(value => {
+    formData.append('details[]', value);
+  });
   formData.append('size.value', body.size.value);
   formData.append('size.mesure', body.size.mesure);
   formData.append('active', body.active);
@@ -109,7 +115,7 @@ async function updateServiceData(pathParams, body, file) {
 
 async function createServiceData(pathParams, body, file) {
   const formData = new FormData();
-  file && formData.set('images', file);
+  file && formData.set('images', file, file.name.replaceAll(' ', '_'));
   formData.append('article', body.article);
   formData.append('product', body.product);
   formData.append('category', body.category);
@@ -117,8 +123,12 @@ async function createServiceData(pathParams, body, file) {
   formData.append('latin_name', body.latin_name);
   formData.append('price', body.price);
   formData.append('currency', body.currency);
-  formData.append('alcohol', body.alcohol);
-  formData.append('details', body.details);
+  body.alcohol.forEach(value => {
+    formData.append('alcohol[]', value);
+  });
+  body.details.forEach(value => {
+    formData.append('details[]', value);
+  });
   formData.append('size.value', body.size.value);
   formData.append('size.mesure', body.size.mesure);
   formData.append('active', body.active);

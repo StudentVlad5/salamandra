@@ -53,6 +53,7 @@ export const EditModal = () => {
       try {
         const { data } = await fetchData(itemForFetch);
         setDataUpdate(data);
+        setImg(data.images);
         if (!data) {
           return onFetchError('Whoops, something went wrong');
         }
@@ -68,7 +69,12 @@ export const EditModal = () => {
   }, [itemForFetch, modal.id]);
 
   async function editPosition(values) {
-    const file = img;
+    let file = false;
+    if (typeof img === 'string' && img !== '' && img !== 'none') {
+      values.images = img;
+    } else {
+      file = img;
+    }
 
     // console.log('editPosition ~ file:', file);
     // console.log('editPosition ~ values:', values);
@@ -88,6 +94,7 @@ export const EditModal = () => {
     } finally {
       setIsLoading(false);
       dispatch(addReload(true));
+      setImg([]);
     }
   }
 
@@ -95,6 +102,7 @@ export const EditModal = () => {
     e.preventDefault();
     dispatch(cleanModal());
     closeModalWindow(e);
+    setImg([]);
   };
 
   return createPortal(
@@ -457,7 +465,6 @@ export const EditModal = () => {
                 <DoneBtn
                   type="submit"
                   disabled={isSubmitting}
-                  // onClick={e => closeDataModal(e)}
                   aria-label="Submit"
                 >
                   <MdDone size={15} />

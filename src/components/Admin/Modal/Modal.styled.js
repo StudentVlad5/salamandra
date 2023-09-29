@@ -131,7 +131,7 @@ export const FormInputBoxColumn = styled.div`
   width: 70%;
 
   & input {
-    width: 86%;
+    width: calc(100% - 42px);
   }
 `;
 

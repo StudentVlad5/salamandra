@@ -43,8 +43,11 @@ export const CreateModal = () => {
   const userName = useSelector(selectUser);
 
   async function createService(values) {
-    // const file = document.querySelector('#images')?.files[0];
     const file = img;
+
+    // console.log('createService ~ file:', file);
+    // console.log('createService ~ values:', values);
+
     setIsLoading(true);
     try {
       const { code } = await createServiceData(`/admin/create`, values, file);
@@ -56,6 +59,7 @@ export const CreateModal = () => {
     } finally {
       setIsLoading(false);
       dispatch(addReload(true));
+      setImg([]);
     }
   }
 
@@ -63,6 +67,7 @@ export const CreateModal = () => {
     e.preventDefault();
     dispatch(cleanModal());
     closeModalWindow(e);
+    setImg([]);
   };
 
   return createPortal(

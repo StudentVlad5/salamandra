@@ -12,7 +12,7 @@ import {
 
 export const Navigation = ({ catalog, isLoading, error }) => {
   const [, setScrollX] = useState(0); //scrollX
-  const [isFixed, setIsFixed] = useState(false);
+  const [isfixed, setIsFixed] = useState('');
   const [activeItem, setActiveItem] = useState(null);
 
   const handleSliderScroll = e => {
@@ -25,11 +25,23 @@ export const Navigation = ({ catalog, isLoading, error }) => {
 
   useEffect(() => {
     const handleScroll = () => {
+      const sections = document.querySelectorAll('.menu-section');
+      let currentActiveSection = null;
+
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 0 && rect.bottom >= 0) {
+          currentActiveSection = section.id;
+        }
+      });
+
+      setActiveItem(currentActiveSection);
+
       const nav = document.getElementById('nav');
       if (!nav) return;
 
       const navPosition = nav.getBoundingClientRect().top;
-      setIsFixed(navPosition <= 0);
+      navPosition <= 0 ? setIsFixed('fall') : setIsFixed('');
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -41,10 +53,11 @@ export const Navigation = ({ catalog, isLoading, error }) => {
   const handleItemClick = item => {
     setActiveItem(item);
   };
+
   return (
     <NavBox id="nav">
       <SwitchTheme />
-      <Nav onScroll={handleSliderScroll} isFixed={isFixed}>
+      <Nav onScroll={handleSliderScroll} isfixed={isfixed}>
         <NavList>
           {isLoading ? onLoading() : onLoaded()}
           {error && onFetchError('Whoops, something went wrong')}
