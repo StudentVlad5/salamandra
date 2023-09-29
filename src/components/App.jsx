@@ -4,14 +4,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 import { RestrictedRoute } from 'routes/RestrictedRoute';
 import { SharedLayout } from 'components/SharedLayout';
-import { refreshUser } from 'redux/auth/operations';
+import { logOut, refreshUser } from 'redux/auth/operations';
 import { selectIsRefreshing, getPermission } from 'redux/auth/selectors';
 import LandingPage from 'pages/LandingPage';
 import AdminPage from 'pages/AdminPage';
 import { Register } from './Auth/Forms/Register';
 import { Login } from './Auth/Forms/Login';
 import { fetchData } from 'services/APIservice';
-import { onFetchError } from 'helpers/Messages/NotifyMessages';
+import { onFetchError, onInfo } from 'helpers/Messages/NotifyMessages';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -43,6 +43,10 @@ export const App = () => {
       }
     })();
   }, []);
+
+
+if(permission === 'user'){onInfo('Please login in as admin'); dispatch(logOut())}
+
 
   return isRefreshing ? (
     <></>

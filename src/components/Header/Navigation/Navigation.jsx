@@ -57,7 +57,7 @@ export const Navigation = ({ catalog, isLoading, error }) => {
   return (
     <NavBox id="nav">
       <SwitchTheme />
-      <Nav onScroll={handleSliderScroll} isfixed={isfixed}>
+      <Nav onScroll={handleSliderScroll} $isfixed={isfixed}>
         <NavList>
           {isLoading ? onLoading() : onLoaded()}
           {error && onFetchError('Whoops, something went wrong')}
