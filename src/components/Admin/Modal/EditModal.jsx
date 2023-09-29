@@ -38,7 +38,7 @@ export const EditModal = () => {
   const { BASE_URL_IMG } = window.global;
 
   const [dataUpdate, setDataUpdate] = useState([]);
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const modal = useSelector(modalComponent);
@@ -94,7 +94,7 @@ export const EditModal = () => {
     } finally {
       setIsLoading(false);
       dispatch(addReload(true));
-      setImg([]);
+      setImg('');
     }
   }
 
@@ -102,7 +102,7 @@ export const EditModal = () => {
     e.preventDefault();
     dispatch(cleanModal());
     closeModalWindow(e);
-    setImg([]);
+    setImg('');
   };
 
   return createPortal(

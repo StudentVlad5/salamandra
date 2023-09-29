@@ -44,9 +44,7 @@ export const App = () => {
     })();
   }, []);
 
-
-if(permission === 'user'){onInfo('Please login in as admin'); dispatch(logOut())}
-
+  if(permission === 'user'){onInfo('Please login in as admin'); dispatch(logOut())}
 
   return isRefreshing ? (
     <></>

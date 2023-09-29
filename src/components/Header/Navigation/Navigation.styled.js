@@ -15,6 +15,7 @@ export const Nav = styled.nav`
   overflow-x: scroll;
   white-space: nowrap;
   cursor: pointer;
+
   width: 100%;
   overflow-x: scroll;
   white-space: nowrap;

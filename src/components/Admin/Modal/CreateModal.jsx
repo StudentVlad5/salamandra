@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdClose, MdDone } from 'react-icons/md';
 import { FieldArray, Formik } from 'formik';
+import PropTypes from 'prop-types';
 import { closeModalWindow } from 'hooks/modalWindow';
 import { cleanModal } from 'redux/modal/operation';
 import { modalComponent } from 'redux/modal/selectors';
@@ -34,10 +35,10 @@ import {
   ModalForm,
 } from './Modal.styled';
 
-export const CreateModal = () => {
+export const CreateModal = ({ lastArticle }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState('');
   const modal = useSelector(modalComponent);
   const dispatch = useDispatch();
   const userName = useSelector(selectUser);
@@ -56,10 +57,11 @@ export const CreateModal = () => {
       }
     } catch (error) {
       setError(error);
+      alert(error.message);
     } finally {
       setIsLoading(false);
       dispatch(addReload(true));
-      setImg([]);
+      setImg('');
     }
   }
 
@@ -67,7 +69,7 @@ export const CreateModal = () => {
     e.preventDefault();
     dispatch(cleanModal());
     closeModalWindow(e);
-    setImg([]);
+    setImg('');
   };
 
   return createPortal(
@@ -89,7 +91,7 @@ export const CreateModal = () => {
           {error && onFetchError('Whoops, something went wrong')}
           <Formik
             initialValues={{
-              article: '',
+              article: lastArticle !== -Infinity ? lastArticle + 1 : '',
               product: '',
               category: '',
               name: '',
@@ -129,7 +131,12 @@ export const CreateModal = () => {
               >
                 <FormList>
                   <FormField>
-                    <FormLabel htmlFor="article">Article</FormLabel>
+                    <FormLabel htmlFor="article">
+                      <span>Article</span>
+                      {errors.article && touched.article ? (
+                        <Error>{errors.article}</Error>
+                      ) : null}
+                    </FormLabel>
                     <FormInput
                       id="article"
                       type="text"
@@ -430,4 +437,8 @@ export const CreateModal = () => {
     ),
     document.querySelector('#popup-root')
   );
+};
+
+CreateModal.propTypes = {
+  lastArticle: PropTypes.any,
 };

@@ -33,6 +33,7 @@ import {
 
 export const Admin = () => {
   const [positions, setPositions] = useState([]);
+  const [lastArticle, setLastArticle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const reload = useSelector(reloadValue);
@@ -53,24 +54,27 @@ export const Admin = () => {
   const [filterAdmin, setFilterAdmin] = useState('');
 
   useEffect(() => {
-    getData();
-  }, [reload]);
-
-  async function getData() {
-    setIsLoading(true);
-    try {
-      const { data } = await fetchData('/admin');
-      setPositions(data);
-      setFilterPositions(data);
-      if (!data) {
-        return onFetchError('Whoops, something went wrong');
+    (async function getData() {
+      setIsLoading(true);
+      try {
+        const { data } = await fetchData('/admin');
+        setPositions(data);
+        setFilterPositions(data);
+        const max = Math.max.apply(
+          Math,
+          data.flatMap(product => product.article)
+        );
+        setLastArticle(max);
+        if (!data) {
+          return onFetchError('Whoops, something went wrong');
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+    })();
+  }, [reload]);
 
   async function deletePosition(id) {
     setIsLoading(true);
@@ -249,7 +253,7 @@ export const Admin = () => {
   };
 
   const clearAllFilters = e => {
-    getData();
+    reload === true ? dispatch(addReload(false)) : dispatch(addReload(true));
     setFilterProduct('');
     setFilterCategory('');
     setFilterName('');
@@ -770,7 +774,6 @@ export const Admin = () => {
                 .slice((current - 1) * size, current * size)
                 .map(position => (
                   <TableRow key={position._id}>
-                    {/* <TableData>{positions._id}</TableData> */}
                     <TableData>{position.product}</TableData>
                     <TableData>{position.category}</TableData>
                     <TableData>{position.name}</TableData>
@@ -827,7 +830,7 @@ export const Admin = () => {
         />
       </AdminContainer>
       <EditModal />
-      <CreateModal />
+      <CreateModal lastArticle={lastArticle} />
     </>
   );
 };

@@ -20,7 +20,9 @@ const MenuTitle = styled.h2`
   font-weight: 700;
   line-height: 29.26px;
   text-transform: uppercase;
-  margin: 25px 0;
+  /* margin: 25px 0; */
+  margin-top: 60px;
+  margin-bottom: 25px;
 `;
 
 const MenuSubTitle = styled(SubtitleText)`
