@@ -1,30 +1,30 @@
 {
   "files": {
-    "main.css": "/salamandra/static/css/main.7cda0caf.css",
-    "main.js": "/salamandra/static/js/main.c41b8a47.js",
-    "static/media/fonMob.png": "/salamandra/static/media/fonMob.d7b15c415580869b09e2.png",
-    "static/media/fonMob.webp": "/salamandra/static/media/fonMob.d7b15c415580869b09e2.webp",
-    "static/media/fonMob@2x.png": "/salamandra/static/media/fonMob@2x.d7b15c415580869b09e2.png",
-    "static/media/fonMob@2x.webp": "/salamandra/static/media/fonMob@2x.d7b15c415580869b09e2.webp",
-    "static/media/fon.webp": "/salamandra/static/media/fon.0a077d044563b4643106.webp",
-    "static/media/fon@2x.webp": "/salamandra/static/media/fon@2x.0a077d044563b4643106.webp",
-    "static/media/fonPng.png": "/salamandra/static/media/fonPng.0a077d044563b4643106.png",
-    "static/media/fonPng@2x.png": "/salamandra/static/media/fonPng@2x.0a077d044563b4643106.png",
-    "static/media/salamandraDesk.png": "/salamandra/static/media/salamandraDesk.b8af246c004511a9ad5d.png",
-    "static/media/salamandraDesk.webp": "/salamandra/static/media/salamandraDesk.b8af246c004511a9ad5d.webp",
-    "static/media/salamandraDesk@2x.png": "/salamandra/static/media/salamandraDesk@2x.b8af246c004511a9ad5d.png",
-    "static/media/salamandraDesk@2x.webp": "/salamandra/static/media/salamandraDesk@2x.b8af246c004511a9ad5d.webp",
-    "static/media/salamandra.png": "/salamandra/static/media/salamandra.2608238304caaf1d882a.png",
-    "static/media/salamandra.webp": "/salamandra/static/media/salamandra.2608238304caaf1d882a.webp",
-    "static/media/salamandra@2x.png": "/salamandra/static/media/salamandra@2x.2608238304caaf1d882a.png",
-    "static/media/salamandra@2x.webp": "/salamandra/static/media/salamandra@2x.2608238304caaf1d882a.webp",
-    "index.html": "/salamandra/index.html",
-    "static/media/logout.svg": "/salamandra/static/media/logout.679e7d3c509259498f69b6b64831187f.svg",
-    "main.7cda0caf.css.map": "/salamandra/static/css/main.7cda0caf.css.map",
-    "main.c41b8a47.js.map": "/salamandra/static/js/main.c41b8a47.js.map"
+    "main.css": "/static/css/main.7cda0caf.css",
+    "main.js": "/static/js/main.36cb2c12.js",
+    "static/media/fonMob.png": "/static/media/fonMob.d7b15c415580869b09e2.png",
+    "static/media/fonMob.webp": "/static/media/fonMob.d7b15c415580869b09e2.webp",
+    "static/media/fonMob@2x.png": "/static/media/fonMob@2x.d7b15c415580869b09e2.png",
+    "static/media/fonMob@2x.webp": "/static/media/fonMob@2x.d7b15c415580869b09e2.webp",
+    "static/media/fon.webp": "/static/media/fon.0a077d044563b4643106.webp",
+    "static/media/fon@2x.webp": "/static/media/fon@2x.0a077d044563b4643106.webp",
+    "static/media/fonPng.png": "/static/media/fonPng.0a077d044563b4643106.png",
+    "static/media/fonPng@2x.png": "/static/media/fonPng@2x.0a077d044563b4643106.png",
+    "static/media/salamandraDesk.png": "/static/media/salamandraDesk.b8af246c004511a9ad5d.png",
+    "static/media/salamandraDesk.webp": "/static/media/salamandraDesk.b8af246c004511a9ad5d.webp",
+    "static/media/salamandraDesk@2x.png": "/static/media/salamandraDesk@2x.b8af246c004511a9ad5d.png",
+    "static/media/salamandraDesk@2x.webp": "/static/media/salamandraDesk@2x.b8af246c004511a9ad5d.webp",
+    "static/media/salamandra.png": "/static/media/salamandra.2608238304caaf1d882a.png",
+    "static/media/salamandra.webp": "/static/media/salamandra.2608238304caaf1d882a.webp",
+    "static/media/salamandra@2x.png": "/static/media/salamandra@2x.2608238304caaf1d882a.png",
+    "static/media/salamandra@2x.webp": "/static/media/salamandra@2x.2608238304caaf1d882a.webp",
+    "index.html": "/index.html",
+    "static/media/logout.svg": "/static/media/logout.679e7d3c509259498f69b6b64831187f.svg",
+    "main.7cda0caf.css.map": "/static/css/main.7cda0caf.css.map",
+    "main.36cb2c12.js.map": "/static/js/main.36cb2c12.js.map"
   },
   "entrypoints": [
     "static/css/main.7cda0caf.css",
-    "static/js/main.c41b8a47.js"
+    "static/js/main.36cb2c12.js"
   ]
 }
