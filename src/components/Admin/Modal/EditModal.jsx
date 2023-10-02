@@ -90,6 +90,7 @@ export const EditModal = () => {
         return onFetchError('Whoops, something went wrong');
       }
     } catch (error) {
+      alert(error);
       setError(error);
     } finally {
       setIsLoading(false);

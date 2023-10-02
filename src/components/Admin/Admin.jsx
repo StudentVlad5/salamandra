@@ -8,6 +8,7 @@ import { addReload } from 'redux/reload/slice';
 import { reloadValue } from 'redux/reload/selectors';
 import { logOut } from 'redux/auth/operations';
 import { fetchData, deleteData } from 'services/APIservice';
+import { getFromStorage } from 'services/localStorService';
 import { PaginationBlock } from 'helpers/Pagination/Pagination';
 import { onLoading, onLoaded } from 'helpers/Loader/Loader';
 import { onFetchError } from 'helpers/Messages/NotifyMessages';
@@ -303,7 +304,9 @@ export const Admin = () => {
   // table pagination
   const [perPage] = useState(20);
   const [size, setSize] = useState(perPage);
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(
+    getFromStorage('page') ? getFromStorage('page') : 1
+  );
 
   return (
     <>

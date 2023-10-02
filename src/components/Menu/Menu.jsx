@@ -83,6 +83,7 @@ export const Menu = ({ catalog, activeSection }) => {
                     {menu?.map(
                       item =>
                         item.category === cat &&
+                        item.product === it &&
                         item?.active && (
                           <MenuListItem
                             key={uuidv4()}

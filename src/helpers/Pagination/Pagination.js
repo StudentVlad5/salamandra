@@ -2,6 +2,7 @@ import React from 'react';
 import Pagination from 'rc-pagination';
 import { MdFastRewind, MdFastForward } from 'react-icons/md';
 import PropTypes from 'prop-types';
+import { saveToStorage } from 'services/localStorService';
 
 export const PaginationBlock = ({
   items,
@@ -16,11 +17,13 @@ export const PaginationBlock = ({
     const newPerPage = Math.ceil(items.length / value);
     if (current > newPerPage) {
       setCurrent(newPerPage);
+      saveToStorage('page', newPerPage);
     }
   };
 
   const PaginationChange = (page, pageSize) => {
     setCurrent(page);
+    saveToStorage('page', page);
     setSize(pageSize);
   };
 
